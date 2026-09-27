@@ -38,6 +38,15 @@ export default function ListTags() {
         <li>Girl&apos;s Last Tour</li>
         <li>SAO</li>
       </ul>
+
+      <h5>HTML Tags</h5>
+      <ul id="wd-ai-html-tags">
+        <li>h1 – top-level heading</li>
+        <li>p – paragraph of text</li>
+        <li>ol – ordered, numbered list</li>
+        <li>ul – unordered, bulleted list</li>
+        <li>table – rows and columns of data</li>
+      </ul>
     </div>
   );
 }
