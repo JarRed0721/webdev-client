@@ -13,8 +13,8 @@ export default function Dashboard() {
         {/* On your own (2.4.2): personalized card */}
         <CourseCard
           id="1234"
-          title="CS1234 React JS - Zhuoxuan Li"
-          subtitle="Zhuoxuan Li's Full Stack software developer course"
+          title="CS1234 React JS"
+          subtitle="Full Stack software developer course"
           image="/images/reactjs.jpg"
         />
         <CourseCard
@@ -33,7 +33,7 @@ export default function Dashboard() {
         <CourseCard
           id="CS9999"
           title="CS9999 Sample Course"
-          subtitle="Assistant-generated sample -- not my course"
+          subtitle="Assistant-generated sample"
           image="/images/reactjs.jpg"
         />
       </div>
