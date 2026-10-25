@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "@/app/labs/lab2/tailwind/utilities.css";
+import * as db from "../../../../database";
 
 const label = "mb-1 block text-sm font-semibold";
 const field =
@@ -9,17 +10,22 @@ const checkRow = "flex items-center gap-2 text-sm";
 export default async function AssignmentEditor({
   params,
 }: {
-  params: Promise<{ cid: string }>;
+  params: Promise<{ cid: string; aid: string }>;
 }) {
-  const { cid } = await params;
+  const { cid, aid } = await params;
+  const assignment = db.assignments.find((a) => a._id === aid);
   const list = `/courses/${cid}/assignments`;
   return (
-    <div id="wd-assignments-editor" className="max-w-2xl">
+    <div id="wd-assignments-editor" key={aid} className="max-w-2xl">
       <div className="mb-4">
         <label htmlFor="wd-name" className={label}>
           Assignment Name
         </label>
-        <input id="wd-name" defaultValue="A1 - ENV + HTML" className={field} />
+        <input
+          id="wd-name"
+          defaultValue={assignment?.title ?? ""}
+          className={field}
+        />
       </div>
       <div className="mb-4">
         <label htmlFor="wd-description" className={label}>
@@ -28,7 +34,7 @@ export default async function AssignmentEditor({
         <textarea
           id="wd-description"
           rows={4}
-          defaultValue="The assignment is available online. Submit a link to the landing page of your Web application."
+          defaultValue={assignment?.description ?? ""}
           className={field}
         />
       </div>
@@ -37,7 +43,11 @@ export default async function AssignmentEditor({
         <label htmlFor="wd-points" className="text-sm font-semibold sm:text-right sm:pt-1.5">
           Points
         </label>
-        <input id="wd-points" defaultValue={100} className={field} />
+        <input
+          id="wd-points"
+          defaultValue={assignment?.points ?? 100}
+          className={field}
+        />
 
         <label htmlFor="wd-group" className="text-sm font-semibold sm:text-right sm:pt-1.5">
           Assignment Group
@@ -99,30 +109,37 @@ export default async function AssignmentEditor({
           <label htmlFor="wd-due-date" className={label}>
             Due
           </label>
-          <input type="date" id="wd-due-date" defaultValue="2024-05-13" className={`${field} mb-3`} />
+          <input
+            type="date"
+            id="wd-due-date"
+            defaultValue={assignment?.due}
+            className={`${field} mb-3`}
+          />
           <div className="flex gap-3">
             <div className="flex-1">
               <label htmlFor="wd-available-from" className={label}>
                 Available from
               </label>
-              <input type="date" id="wd-available-from" defaultValue="2024-05-06" className={field} />
+              <input
+                type="date"
+                id="wd-available-from"
+                defaultValue={assignment?.available}
+                className={field}
+              />
             </div>
             <div className="flex-1">
               <label htmlFor="wd-available-until" className={label}>
                 Until
               </label>
-              <input type="date" id="wd-available-until" defaultValue="2024-05-20" className={field} />
+              <input
+                type="date"
+                id="wd-available-until"
+                defaultValue={assignment?.due}
+                className={field}
+              />
             </div>
           </div>
         </div>
-      </div>
-
-      {/* With AI (2.4.8) */}
-      <div className="mb-4">
-        <label htmlFor="wd-ai-editor-notes" className={label}>
-          Sample notes
-        </label>
-        <textarea id="wd-ai-editor-notes" rows={3} className={field} />
       </div>
 
       <hr className="my-4 border-neutral-300" />

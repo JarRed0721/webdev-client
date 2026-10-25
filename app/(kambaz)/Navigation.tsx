@@ -1,48 +1,26 @@
 "use client";
 
-import { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AiOutlineDashboard } from "react-icons/ai";
-import { FaRegCircleUser, FaCircleQuestion } from "react-icons/fa6";
+import { FaRegCircleUser } from "react-icons/fa6";
 import { FaInbox } from "react-icons/fa";
 import { IoCalendarOutline } from "react-icons/io5";
 import { LiaBookSolid, LiaCogSolid } from "react-icons/lia";
 import "@/app/labs/lab2/tailwind/utilities.css";
 
-function NavTile({
-  href,
-  id,
-  active,
-  icon,
-  children,
-}: {
-  href: string;
-  id: string;
-  active: boolean;
-  icon: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      id={id}
-      className={`block py-3 text-center text-sm no-underline ${
-        active ? "bg-white text-red-600" : "bg-black text-white"
-      }`}
-    >
-      {icon}
-      <br />
-      {children}
-    </Link>
-  );
-}
+const LINKS = [
+  { label: "Dashboard", path: "/dashboard", icon: AiOutlineDashboard },
+  { label: "Courses", path: "/dashboard", icon: LiaBookSolid },
+  { label: "Calendar", path: "/calendar", icon: IoCalendarOutline },
+  { label: "Inbox", path: "/inbox", icon: FaInbox },
+  { label: "Labs", path: "/labs", icon: LiaCogSolid },
+] as const;
 
 export default function KambazNavigation() {
-  const pathname = usePathname();
-  const is = (prefix: string) => pathname.startsWith(prefix);
-  const idle = "inline-block text-3xl text-red-500";
-  const active = "inline-block text-3xl text-red-600";
+  const pathname = usePathname() ?? "";
+  const accountActive = pathname.includes("/account");
   return (
     <nav
       id="wd-kambaz-navigation"
@@ -55,8 +33,7 @@ export default function KambazNavigation() {
         rel="noreferrer"
         className="block bg-black py-3 text-center no-underline"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="/images/NEU.png"
           alt="Northeastern"
           width={64}
@@ -64,72 +41,46 @@ export default function KambazNavigation() {
           className="mx-auto"
         />
       </a>
-      <NavTile
+      <Link
         href="/account"
         id="wd-account-link"
-        active={is("/account")}
-        icon={
-          <FaRegCircleUser
-            className={`inline-block text-3xl ${is("/account") ? "text-red-600" : "text-white"}`}
-          />
-        }
+        className={`block py-3 text-center text-sm no-underline ${
+          accountActive ? "bg-white text-red-600" : "bg-black text-white"
+        }`}
       >
+        <FaRegCircleUser
+          className={`inline-block text-3xl ${
+            accountActive ? "text-red-600" : "text-white"
+          }`}
+        />
+        <br />
         Account
-      </NavTile>
-      <NavTile
-        href="/dashboard"
-        id="wd-dashboard-link"
-        active={is("/dashboard")}
-        icon={
-          <AiOutlineDashboard
-            className={is("/dashboard") ? active : idle}
-          />
-        }
-      >
-        Dashboard
-      </NavTile>
-      {/* On your own (2.4.1): remaining links */}
-      <NavTile
-        href="/dashboard"
-        id="wd-course-link"
-        active={is("/courses")}
-        icon={<LiaBookSolid className={is("/courses") ? active : idle} />}
-      >
-        Courses
-      </NavTile>
-      <NavTile
-        href="/calendar"
-        id="wd-calendar-link"
-        active={is("/calendar")}
-        icon={<IoCalendarOutline className={is("/calendar") ? active : idle} />}
-      >
-        Calendar
-      </NavTile>
-      <NavTile
-        href="/inbox"
-        id="wd-inbox-link"
-        active={is("/inbox")}
-        icon={<FaInbox className={is("/inbox") ? active : idle} />}
-      >
-        Inbox
-      </NavTile>
-      <NavTile
-        href="/labs"
-        id="wd-labs-link"
-        active={is("/labs")}
-        icon={<LiaCogSolid className={is("/labs") ? active : idle} />}
-      >
-        Labs
-      </NavTile>
-      {/* With AI (2.4.1) */}
-      <NavTile
-        href="/labs"
-        id="wd-ai-nav-help"
-        active={false}
-        icon={<FaCircleQuestion className={idle} />}
-      >
-        Help
-      </NavTile>
+      </Link>
+      {LINKS.map((link) => {
+        const active =
+          link.label === "Courses"
+            ? pathname.includes("/courses")
+            : pathname.includes(link.path);
+        const Icon = link.icon;
+        return (
+          <Link
+            key={link.label}
+            href={link.path}
+            id={`wd-${link.label.toLowerCase()}-link`}
+            className={`block py-3 text-center text-sm no-underline ${
+              active ? "bg-white text-red-600" : "bg-black text-white"
+            }`}
+          >
+            <Icon
+              className={`inline-block text-3xl ${
+                active ? "text-red-600" : "text-red-500"
+              }`}
+            />
+            <br />
+            {link.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }
