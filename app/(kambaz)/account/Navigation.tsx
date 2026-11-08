@@ -4,14 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "@/app/labs/lab2/tailwind/utilities.css";
 import "../kambaz.css";
+import { useAccountContext } from "./AccountContext";
 
 export default function AccountNavigation() {
+  const { currentUser } = useAccountContext();
   const pathname = usePathname() ?? "";
-  const links = [
-    { href: "/account/signin", label: "Signin", id: "wd-account-signin-link" },
-    { href: "/account/signup", label: "Signup", id: "wd-account-signup-link" },
-    { href: "/account/profile", label: "Profile", id: "wd-account-profile-link" },
-  ];
+  const links = currentUser
+    ? [{ href: "/account/profile", label: "Profile", id: "wd-account-profile-link" }]
+    : [
+        { href: "/account/signin", label: "Sign in", id: "wd-account-signin-link" },
+        { href: "/account/signup", label: "Sign up", id: "wd-account-signup-link" },
+      ];
   return (
     <div id="wd-account-navigation" className="wd list-group rounded-none">
       {links.map((l) => (
